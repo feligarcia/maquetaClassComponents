@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Container from '../container/Container';
+import Navbar from '../components/Navbar';
+import Usuarios from '../components/Usuarios';
 
 export default class AppRouter extends Component {
     render() {
         return (
-                 <HashRouter>
-                   <Routes>
+                 <BrowserRouter>
+                     <Navbar/>
+                    <Routes>
                        <Route path="/" element={<Container/>}/>
+                       <Route path="/usuario" element={<Usuarios/>}/> 
+                       <Route path="*" element={<Navigate to="/" />}/>
                    </Routes>
-                </HashRouter>
+                </BrowserRouter>
           
         )
 

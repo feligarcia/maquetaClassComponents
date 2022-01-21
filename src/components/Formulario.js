@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Lista from './Lista';
+import { url } from '../helpers/url';
+import getData from './GetData'
+
+
 
 
 const Input = styled.input`
@@ -19,14 +23,61 @@ const Form = styled.form`
 
 
 export default class Formulario extends Component {
+    
+    constructor(){
+        super()
+        this.state ={
+            form:{
+                product: '',
+                description: '',
+            },
+            ProductosAc:[],
+        }
+    }
 
+handleInputCHanged = ({target}) => {
+    this.setState({
+        form:{
+           ...this.state.form,
+           [target.name]: target.value 
+        }}
+    )
+    console.log(this.state.form)
+}
+
+async componentDidMount(){
+    const listadoData = await getData(url)
+    this.setState({ProductosAc:listadoData})
+}
+
+
+
+handleSubmit = async (e) =>{
+    e.preventDefault();
+    await this.addData()
+    const listadoData = await getData(url)
+    this.setState({ProductosAc:listadoData})
+    console.log(this.state.ProductosAc)
+    
+}
+
+
+addData = async () =>{
+await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(this.state.form),
+    headers: {
+        "Content-Type" : "application/json; charset=UTF-8"
+    }
+})
+}
     render() {
         return (
             <div className="container mt-5">
                 <div className="row">
                     <div className="col-12">
                         <h3 className="text-center"> Productos </h3>
-                        <Form className="form-group p-5">
+                        <Form className="form-group p-5" onSubmit={this.handleSubmit}>
                             <input
                                 id="fileSelector"
                                 type="text"
@@ -34,6 +85,7 @@ export default class Formulario extends Component {
                                 placeholder="url image"
                                 name="imagen"
                                 required
+                                onChange={this.handleInputCHanged}
                                />
 
                             <input
@@ -43,6 +95,7 @@ export default class Formulario extends Component {
                                 autoComplete="off"
                                 placeholder="product name"
                                 required
+                                onChange={this.handleInputCHanged}
                                 />
 
                             <TextArea
@@ -51,6 +104,7 @@ export default class Formulario extends Component {
                                 name="descripcion"
                                 placeholder="description"
                                 required
+                                onChange={this.handleInputCHanged}
                          
                             ></TextArea>
 
@@ -62,7 +116,7 @@ export default class Formulario extends Component {
                                 />
                             </div>
                         </Form>
-                        <Lista />
+                        <Lista productAc={this.state.ProductosAc} />
                     </div>
 
                 </div>

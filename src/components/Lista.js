@@ -1,25 +1,10 @@
 import React, { Component } from 'react';
 import { url } from '../helpers/url';
+
 export default class Lista extends Component {
 
- constructor(){
-     super();
-     this.state = {
-         products: []
-     }
- }
-componentDidMount(){
-    this.getData()
-}
-
- async getData(){
-     const response = await fetch(url)
-     const data = await response.json()
-     console.log(response)
-     this.setState({products:data})
- }
     render() {
-        
+        console.log(this.props.productAc)
         return <div>
             <div>
                 <table className="table text-center mt-3">
@@ -32,7 +17,7 @@ componentDidMount(){
                     </thead>
                     <tbody>
                    {
-                       this.state.products.map(product=>(
+                       this.props.productAc.map(product=>(
                        <tr key={product.id}>  
                             <td><img src={product.imagen} width="100" height="100"/></td>
                             <td>{product.product}</td>
@@ -45,3 +30,4 @@ componentDidMount(){
         </div>;
     }
 }
+
